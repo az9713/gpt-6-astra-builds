@@ -10,11 +10,11 @@ import zlib
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'https://az9713.github.io/gpt-6-astra-builds/'
 HASHES = {
-    '01-trojan-vase': '88ae4ad2c374adfaaa250a14bbd7bb3ecd1a09f0157348e37b9b5f3a29e383cb',
-    '02-sisyphus-relief': '3e98269a6786d74816fc75db0a0a99281f764e37addff94524baa3eccf1a796d',
-    '03-paris-balloon': 'deca1f03043b1550aea233240786702f5deeee0762d596fc8f9d8bc2665efdd2',
-    '04-golden-gate': 'b4670ebd64da55077f687c7f26c2f4c069f478060c000a609a9108d4785a765f',
-    '05-tortoise-hare': '326585791e62429f2fbf75946578ad58e6d08c0ec395f6b1ed296f646e02fc97',
+    '01-trojan-vase': '3dd321b03a4ae28a5ed2e121dac826d1c774bba1ce20488c439ebabd1850e378',
+    '02-sisyphus-relief': '005e9e154cac0a3e18187f1d71d81b02ef5d20403a3f14001e5d46b20907e6b7',
+    '03-paris-balloon': '987c416dcc558198413b277b43aaf5b8d51cc8bb5383240a508a6da15d66f216',
+    '04-golden-gate': '2cf766fb41a702d2424e4112a332d497b08bca115332f7b7aad22f808a518eac',
+    '05-tortoise-hare': 'ebebcd59a85d02e9c29e91a5c3cfe2c411b3bac8e2736e55af69c472692b6e13',
 }
 ALLOWED = {'.gitignore', '.gitattributes', '.nojekyll', 'README.md', 'index.html',
            'scripts/verify.py', '.github/workflows/pages.yml'}
@@ -58,7 +58,8 @@ for slug, expected in HASHES.items():
     source = data.decode('utf-8')
     doc = Document(source)
     check(sum(t == 'canvas' for t, _ in doc.tags) == 1, f'Expected one visible canvas: {slug}')
-    check(not any(t in {'svg', 'img', 'video', 'audio', 'iframe', 'link', 'input', 'button', 'a'} for t, _ in doc.tags), f'Unexpected asset, navigation, or UI: {slug}')
+    check(not any(t in {'svg', 'img', 'video', 'audio', 'iframe', 'input', 'button', 'a'} for t, _ in doc.tags), f'Unexpected asset, navigation, or UI: {slug}')
+    check([a for t, a in doc.tags if t == 'link'] == [{'rel': 'icon', 'href': 'data:,'}], f'Expected only the empty inline favicon: {slug}')
     check(not any(t == 'script' and 'src' in a for t, a in doc.tags), f'External script: {slug}')
     check(not re.search(r'https?://|\bfetch\s*\(|\bXMLHttpRequest\b|\bWebSocket\b|\bimport\s*\(|\bnew\s+Image\b', source), f'External asset mechanism: {slug}')
     check("modelRequested:'gpt-6-astra'" in source and "reasoningEffortRequested:'xhigh'" in source, f'Generation attribution missing: {slug}')
