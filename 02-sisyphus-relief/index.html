@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generation" content="Astra Extra High, generation 2"><title>Sisyphus, the Living Stone</title><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#161d21}canvas{display:block;width:100vw;height:100vh}</style></head><body><canvas role="img" aria-label="Sisyphus, the Living Stone. A twenty-second original Canvas animation."></canvas><script>
+'use strict';
+const screen=document.querySelector('canvas'),g=screen.getContext('2d',{alpha:false});
+const WIDTH=1600,HEIGHT=900,PI=Math.PI,TAU=PI*2;
+let pen=g,manualTime=null,startTime=null,lastTime=0,hiddenAt=null;
+const bound=(v,l=0,h=1)=>Math.max(l,Math.min(h,v));
+const lerp=(a,b,u)=>a+(b-a)*u;
+const smooth=u=>{u=bound(u);return u*u*(3-2*u)};
+const tween=(t,a,b)=>smooth((t-a)/(b-a));
+const random=seed=>()=>((seed=(Math.imul(1664525,seed)+1013904223)>>>0)/4294967296);
+function fill(x,y,w,h,color){pen.fillStyle=color;pen.fillRect(x,y,w,h)}
+function oval(x,y,rx,ry,color,rotation=0,stroke=null,width=1){pen.beginPath();pen.ellipse(x,y,Math.max(.01,rx),Math.max(.01,ry),rotation,0,TAU);if(color){pen.fillStyle=color;pen.fill()}if(stroke){pen.strokeStyle=stroke;pen.lineWidth=width;pen.stroke()}}
+function polygon(points,color,stroke=null,width=1){pen.beginPath();points.forEach((p,i)=>i?pen.lineTo(...p):pen.moveTo(...p));pen.closePath();if(color){pen.fillStyle=color;pen.fill()}if(stroke){pen.strokeStyle=stroke;pen.lineWidth=width;pen.stroke()}}
+function stroke(points,color,width=1){pen.beginPath();points.forEach((p,i)=>i?pen.lineTo(...p):pen.moveTo(...p));pen.strokeStyle=color;pen.lineWidth=width;pen.lineCap='round';pen.lineJoin='round';pen.stroke()}
+function bezier(points,color,width=1){pen.beginPath();pen.moveTo(...points[0]);for(let j=1;j<points.length;j+=3)pen.bezierCurveTo(...points[j],...points[j+1],...points[j+2]);pen.strokeStyle=color;pen.lineWidth=width;pen.lineCap='round';pen.stroke()}
+function path(commands,color,edge=null,width=1){pen.beginPath();for(const q of commands){if(q[0]==='M')pen.moveTo(q[1],q[2]);else if(q[0]==='L')pen.lineTo(q[1],q[2]);else if(q[0]==='C')pen.bezierCurveTo(...q.slice(1));else if(q[0]==='Q')pen.quadraticCurveTo(...q.slice(1));else if(q[0]==='Z')pen.closePath()}if(color){pen.fillStyle=color;pen.fill()}if(edge){pen.strokeStyle=edge;pen.lineWidth=width;pen.lineJoin='round';pen.stroke()}}
+function linear(x,y,x2,y2,colors){const a=pen.createLinearGradient(x,y,x2,y2);colors.forEach(p=>a.addColorStop(...p));return a}
+function radial(x,y,r,colors){const a=pen.createRadialGradient(x,y,0,x,y,r);colors.forEach(p=>a.addColorStop(...p));return a}
+function layer(painter,w=WIDTH,h=HEIGHT){let b=document.createElement('canvas');b.width=w;b.height=h;let previous=pen;pen=b.getContext('2d');painter();pen=previous;return b}
+function leaf(x,y,size,angle,color){pen.save();pen.translate(x,y);pen.rotate(angle);path([['M',0,0],['C',size*.8,-size*.8,size*1.4,-size*.15,size*1.65,0],['C',size*.9,size*.48,size*.3,size*.25,0,0],['Z']],color);pen.restore()}
+function speckle(seed,count,area,colors,min=.5,max=2){let r=random(seed);for(let i=0;i<count;i++)oval(area[0]+r()*area[2],area[1]+r()*area[3],min+r()*max,min+r()*max*.6,colors[i%colors.length],r()*PI)}
+const paper=layer(()=>{let r=random(101);const data=pen.createImageData(400,225);for(let i=0;i<data.data.length;i+=4){let v=r()<.52?255:0;data.data[i]=data.data[i+1]=data.data[i+2]=v;data.data[i+3]=7+Math.floor(r()*12)}pen.putImageData(data,0,0)},400,225);
+function texture(alpha=.38){pen.save();pen.globalAlpha=alpha;pen.drawImage(paper,0,0,WIDTH,HEIGHT);pen.restore()}
+function render(t){lastTime=t;const s=Math.min(screen.width/WIDTH,screen.height/HEIGHT);g.setTransform(1,0,0,1,0,0);fill(0,0,screen.width,screen.height,background);g.setTransform(s,0,0,s,(screen.width-WIDTH*s)/2,(screen.height-HEIGHT*s)/2);pen=g;pen.save();drawScene(t);pen.restore()}
+function resize(){const d=Math.min(devicePixelRatio||1,2);screen.width=Math.round(innerWidth*d);screen.height=Math.round(innerHeight*d);render(lastTime)}
+window.__renderAt=t=>{manualTime=bound(t,0,20);render(manualTime)};
+window.__resume=()=>{manualTime=null;startTime=null};
+window.__sceneInfo={duration:20,renderer:'Canvas 2D',generation:'Astra Extra High — generation 2',modelRequested:'gpt-6-astra',reasoningEffortRequested:'xhigh',externalAssets:0};
+window.__stateAt=t=>sceneState(bound(t,0,20));
+function tick(now){if(startTime===null)startTime=now;let t=(now-startTime)/1000;if(manualTime!==null)t=manualTime;else t=repeat?t%20:Math.min(20,t);if(t!==lastTime)render(t);requestAnimationFrame(tick)}
+addEventListener('resize',resize);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=performance.now();else if(hiddenAt!==null){if(startTime!==null)startTime+=performance.now()-hiddenAt;hiddenAt=null}});
+
+const background='#292b27',repeat=true;
+const slope=x=>801-.316*x;
+const masonry=layer(()=>{fill(0,0,1600,900,linear(70,0,1500,900,[[0,'#d9c8aa'],[.45,'#bba98c'],[1,'#6c7164']]));
+// A broad weathered limestone panel catches raking light from the upper left.
+fill(41,31,1518,838,'#514f43');fill(57,45,1486,810,linear(120,70,1510,855,[[0,'#e4d7b9'],[.37,'#c8b696'],[1,'#99917a']]));stroke([[59,853],[59,47],[1540,47]],'#eee1c2',8);stroke([[67,843],[1534,843],[1534,57]],'#807761',8);
+pen.save();pen.beginPath();pen.rect(84,80,1432,733);pen.clip();
+path([['M',80,545],['L',211,350],['L',279,428],['L',432,230],['L',594,453],['L',773,306],['L',879,423],['L',1092,166],['L',1275,319],['L',1417,196],['L',1540,342],['L',1540,811],['L',80,811],['Z']],'#aea085');
+for(const p of [[[205,364],[244,387],[279,428]],[[432,230],[459,372],[511,384],[594,453]],[[1092,166],[1124,288],[1198,260],[1275,319]],[[773,306],[795,397],[843,401],[879,423]]]){stroke(p,'#d6c5a2',5);stroke(p.map(a=>[a[0]+5,a[1]+5]),'#948c76',2)}
+path([['M',79,715],['C',303,586,356,588,522,562],['C',678,541,762,490,846,450],['C',1028,353,1186,385,1520,221],['L',1520,825],['L',79,825],['Z']],'#b6a487');
+polygon([[83,slope(83)+4],[1516,slope(1516)+4],[1516,814],[83,814]],linear(100,790,1400,400,[[0,'#a99b7d'],[.6,'#c4b18a'],[1,'#d5c09a']]));stroke([[84,slope(84)+7],[1516,slope(1516)+7]],'#756e57',16);stroke([[84,slope(84)-1],[1516,slope(1516)-1]],'#eee0b9',6);
+let r=random(482);for(let i=0;i<13500;i++){let x=85+r()*1430,y=83+r()*728;oval(x,y,.2+r()*2,.2+r()*1.3,i%3?'rgba(66,56,40,.085)':'rgba(255,242,210,.18)',r()*PI)}
+for(let j=0;j<54;j++){let x=95+r()*1400,y=90+r()*700;const crack=[[x,y],[x+7,y+13],[x+3,y+24],[x+13,y+37]];stroke(crack,'rgba(79,71,54,.24)',.8);stroke(crack.map(p=>[p[0]-1,p[1]-1]),'rgba(241,221,182,.3)',.6)}
+for(let j=0;j<13;j++){let x=143+j*106,y=slope(x)+42+r()*125;bezier([[x,y],[x+19,y-21],[x+49,y-17],[x+70,y-22]],'rgba(91,78,53,.17)',2)}pen.restore();
+// The frame bears a restrained carved bead-and-reel ornament.
+for(let x=100;x<1510;x+=26){oval(x,66,5,5,'#a8997c',0,'#ece0bd',1);stroke([[x+9,62],[x+9,70]],'#817b66',1)}
+});
+function stoneLimb(points,width){for(let i=1;i<points.length;i++){let a=points[i-1],b=points[i],dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy),w=width*.6,tip=width*(i===points.length-1?.32:.5);pen.save();pen.translate(a[0],a[1]);pen.rotate(Math.atan2(dy,dx)-PI/2);pen.shadowColor='rgba(58,55,41,.24)';pen.shadowOffsetX=3;pen.shadowOffsetY=4;pen.shadowBlur=3;path([['M',-w,0],['C',-w*1.1,length*.26,-tip*1.4,length*.67,-tip,length],['Q',0,length+tip,tip,length],['C',tip*1.4,length*.63,w*1.1,length*.26,w,0],['Q',0,-w,-w,0],['Z']],linear(-w,0,w,0,[[0,'#e9d6ab'],[.3,'#d1bd92'],[.75,'#af9870'],[1,'#8d7e5d']]),'#a28f6c',1.1);pen.shadowColor='transparent';bezier([[-w*.55,3],[-w*.7,length*.25],[-tip*.8,length*.7],[-tip*.6,length-3]],'rgba(248,231,192,.5)',2);pen.restore()}}
+function sculptedMan(x,t,pushing){const gait=Math.sin(TAU*24*t/20),y=slope(x)-5;pen.save();pen.translate(x,y);
+// Grounded legs carry the torso forward; fingertips meet the rock's left contour.
+let leftK=[-34-gait*8,-51],rightK=[31+gait*8,-47];stoneLimb([[-8,-103],leftK,[-62-gait*10,19]],24);stoneLimb([[9,-105],rightK,[53+gait*9,-17]],22);stoneLimb([[-61-gait*10,19],[-45-gait*10,18]],15);stoneLimb([[53+gait*9,-17],[74+gait*9,-19]],15);
+pen.save();pen.shadowColor='rgba(61,56,42,.3)';pen.shadowOffsetX=6;pen.shadowOffsetY=8;pen.shadowBlur=4;
+path([['M',-18,-111],['C',-38,-139,-34,-172,-7,-199],['C',9,-210,29,-204,38,-188],['C',52,-165,27,-135,20,-107],['C',12,-97,-8,-100,-18,-111],['Z']],linear(-34,-195,42,-104,[[0,'#ead7ac'],[.45,'#c5ae84'],[1,'#9a8664']]),'#948267',2);pen.restore();
+bezier([[-12,-193],[-27,-167],[-14,-146],[8,-138]],'#eee0b9',4);bezier([[25,-187],[13,-163],[19,-152],[7,-134]],'#9e8b66',3);bezier([[-19,-160],[-6,-153],[6,-151],[14,-149]],'#ae976e',2);stroke([[-16,-135],[5,-125]],'#927d59',2);
+let hands=[[lerp(47,100,pushing),lerp(-142,-137,pushing)],[lerp(30,106,pushing),lerp(-86,-111,pushing)]];
+stoneLimb([[22,-181],[60,-155],hands[0]],20);stoneLimb([[-4,-177],[41,-123],hands[1]],22);
+for(let k=0;k<4;k++)stroke([[hands[0][0]-2,hands[0][1]+k*3],[hands[0][0]+9,hands[0][1]+k*3-2]],'#b7a078',2.7);
+stoneLimb([[16,-197],[29,-222]],19);
+path([['M',20,-217],['C',2,-224,4,-253,24,-263],['C',43,-271,59,-253,54,-237],['L',67,-230],['L',55,-225],['C',56,-213,40,-210,32,-211],['Z']],linear(11,-257,61,-214,[[0,'#e7d1a3'],[.52,'#c8ae7d'],[1,'#a08a61']]),'#8e7b58',1.5);
+path([['M',10,-239],['C',-4,-258,10,-279,30,-274],['C',48,-279,61,-262,57,-246],['L',43,-252],['L',39,-236],['L',28,-241],['L',22,-231],['Z']],'#8e7e5f');
+for(let j=0;j<13;j++){let xx=11+j*3.3,yy=-260+Math.sin(j*.9)*4;bezier([[xx,yy+8],[xx-6,yy-4],[xx+7,yy-9],[xx+8,yy+4]],'#b4a07a',2)}
+path([['M',31,-228],['L',50,-218],['L',53,-209],['L',38,-196],['L',27,-204],['L',23,-220],['Z']],'#94805b');for(let j=0;j<6;j++)bezier([[29+j*3,-220],[28+j*3,-211],[34+j*2,-207],[32+j*3,-202]],'#c4ac7d',1.6);
+stroke([[46,-241],[54,-240]],'#746345',2.5);stroke([[50,-217],[58,-218]],'#7e6a48',1.5);
+path([['M',-21,-112],['L',22,-111],['L',35,-76],['Q',4,-68,-31,-84],['Z']],linear(-20,-110,25,-73,[[0,'#d2bd93'],[1,'#a08a63']]),'#867653',2);for(let j=0;j<8;j++)bezier([[-23+j*6,-107],[-20+j*6,-96],[-30+j*8,-90],[-26+j*8,-81]],j%2?'#e8d5aa':'#9d865e',2);pen.restore()}
+function massiveStone(x,y,angle){pen.save();pen.translate(x,y);pen.rotate(angle);let pts=[];for(let i=0;i<26;i++){let a=i*TAU/26,r=128+7*Math.sin(i*1.83)+3*Math.cos(i*3.3);pts.push([Math.cos(a)*r,Math.sin(a)*r])}pen.save();pen.shadowColor='rgba(55,49,35,.28)';pen.shadowOffsetX=11;pen.shadowOffsetY=13;pen.shadowBlur=9;polygon(pts,linear(-90,-100,120,120,[[0,'#f0e0b9'],[.25,'#d4c099'],[.65,'#b09b74'],[1,'#766e54']]),'#918466',3);pen.restore();
+polygon([[-103,-53],[-43,-106],[23,-123],[77,-79],[40,-13],[-17,10],[-94,-6]],'rgba(250,233,194,.15)');polygon([[40,-13],[77,-79],[117,-18],[103,61],[41,108],[-1,51]],'rgba(71,68,47,.12)');polygon([[-102,20],[-37,37],[-1,51],[41,108],[-29,122],[-86,83]],'rgba(89,78,53,.09)');
+let r=random(781);for(let i=0;i<850;i++){let xx=r()*246-123,yy=r()*246-123;if(xx*xx+yy*yy<15000){oval(xx,yy,.3+r()*2.2,.3+r()*1.5,i%4?'rgba(96,79,50,.15)':'rgba(255,243,209,.45)');if(i%9===0)stroke([[xx,yy],[xx+2,yy+2]],'#e0cfa7',.7)}}
+for(let p of [[[-95,-27],[-67,-41],[-30,-19],[-12,-28]],[[29,-88],[18,-41],[41,-11],[33,25]],[[-21,52],[-35,76],[-22,102]]]){stroke(p,'rgba(82,74,51,.42)',2);stroke(p.map(q=>[q[0]-1,q[1]-2]),'rgba(243,224,182,.6)',1)}pen.restore()}
+function rockPosition(t){if(t<4)return lerp(1128,1210,tween(t,0,4));if(t<9)return lerp(1210,336,Math.pow((t-4)/5,1.7));if(t<11.8)return 336;return lerp(336,1128,tween(t,11.8,20))}
+function sceneState(t){let rock=rockPosition(t),person;if(t<4)person=rock-210;else if(t<11.8)person=lerp(1000,126,tween(t,6.8,11.8));else person=rock-210;let pushing=t<7?1-tween(t,4,4.65):tween(t,11.15,11.8);return {time:t,rockX:rock,personX:person,rockAngle:(rock-1128)/128,pushing}}
+function drawScene(t){let s=sceneState(t);pen.drawImage(masonry,0,0);let bounce=t>4&&t<9?Math.abs(Math.sin((t-4)*9))*Math.sin((t-4)/5*PI)*15:0;oval(s.rockX+26,slope(s.rockX)+13,126,17,'rgba(66,59,40,.27)',-.3);sculptedMan(s.personX,t,s.pushing);massiveStone(s.rockX,slope(s.rockX)-126-bounce,s.rockAngle);
+// Dust follows earlier impacts, so the cloud has a wake instead of sticking to the rock.
+if(t>4&&t<12){const r=random(940);for(let i=0;i<130;i++){let hit=4.2+(i%13)*.365,age=t-hit,life=1.2+r()*1.7;if(age>0&&age<life){let x=rockPosition(hit),direction=40+r()*105,yy=slope(x)-age*(29+r()*33);pen.globalAlpha=Math.sin(age/life*PI)*.17;oval(x+age*direction,yy,8+age*18,4+age*8,'#e5d5b0',-.25)}}pen.globalAlpha=1;for(let i=0;i<24;i++){let hit=4.3+(i%12)*.38,age=t-hit;if(age>0&&age<.85){let x=rockPosition(hit)+age*(45+i*3),yy=slope(x)-Math.sin(age/.85*PI)*(14+i%4*9);polygon([[x,yy],[x+5,yy-4],[x+9,yy],[x+4,yy+3]],'#8c7b58')}}}
+fill(0,0,1600,900,linear(0,0,1600,900,[[0,'rgba(255,239,198,.11)'],[.5,'rgba(250,227,180,0)'],[1,'rgba(28,41,36,.09)']]));texture(.5)}
+
+window.__sceneInfo.loop=repeat;resize();requestAnimationFrame(tick);
+</script></body></html>

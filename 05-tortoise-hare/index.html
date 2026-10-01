@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generation" content="Astra Extra High, generation 2"><title>The Last Few Steps</title><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#161d21}canvas{display:block;width:100vw;height:100vh}</style></head><body><canvas role="img" aria-label="The Last Few Steps. A twenty-second original Canvas animation."></canvas><script>
+'use strict';
+const screen=document.querySelector('canvas'),g=screen.getContext('2d',{alpha:false});
+const WIDTH=1600,HEIGHT=900,PI=Math.PI,TAU=PI*2;
+let pen=g,manualTime=null,startTime=null,lastTime=0,hiddenAt=null;
+const bound=(v,l=0,h=1)=>Math.max(l,Math.min(h,v));
+const lerp=(a,b,u)=>a+(b-a)*u;
+const smooth=u=>{u=bound(u);return u*u*(3-2*u)};
+const tween=(t,a,b)=>smooth((t-a)/(b-a));
+const random=seed=>()=>((seed=(Math.imul(1664525,seed)+1013904223)>>>0)/4294967296);
+function fill(x,y,w,h,color){pen.fillStyle=color;pen.fillRect(x,y,w,h)}
+function oval(x,y,rx,ry,color,rotation=0,stroke=null,width=1){pen.beginPath();pen.ellipse(x,y,Math.max(.01,rx),Math.max(.01,ry),rotation,0,TAU);if(color){pen.fillStyle=color;pen.fill()}if(stroke){pen.strokeStyle=stroke;pen.lineWidth=width;pen.stroke()}}
+function polygon(points,color,stroke=null,width=1){pen.beginPath();points.forEach((p,i)=>i?pen.lineTo(...p):pen.moveTo(...p));pen.closePath();if(color){pen.fillStyle=color;pen.fill()}if(stroke){pen.strokeStyle=stroke;pen.lineWidth=width;pen.stroke()}}
+function stroke(points,color,width=1){pen.beginPath();points.forEach((p,i)=>i?pen.lineTo(...p):pen.moveTo(...p));pen.strokeStyle=color;pen.lineWidth=width;pen.lineCap='round';pen.lineJoin='round';pen.stroke()}
+function bezier(points,color,width=1){pen.beginPath();pen.moveTo(...points[0]);for(let j=1;j<points.length;j+=3)pen.bezierCurveTo(...points[j],...points[j+1],...points[j+2]);pen.strokeStyle=color;pen.lineWidth=width;pen.lineCap='round';pen.stroke()}
+function path(commands,color,edge=null,width=1){pen.beginPath();for(const q of commands){if(q[0]==='M')pen.moveTo(q[1],q[2]);else if(q[0]==='L')pen.lineTo(q[1],q[2]);else if(q[0]==='C')pen.bezierCurveTo(...q.slice(1));else if(q[0]==='Q')pen.quadraticCurveTo(...q.slice(1));else if(q[0]==='Z')pen.closePath()}if(color){pen.fillStyle=color;pen.fill()}if(edge){pen.strokeStyle=edge;pen.lineWidth=width;pen.lineJoin='round';pen.stroke()}}
+function linear(x,y,x2,y2,colors){const a=pen.createLinearGradient(x,y,x2,y2);colors.forEach(p=>a.addColorStop(...p));return a}
+function radial(x,y,r,colors){const a=pen.createRadialGradient(x,y,0,x,y,r);colors.forEach(p=>a.addColorStop(...p));return a}
+function layer(painter,w=WIDTH,h=HEIGHT){let b=document.createElement('canvas');b.width=w;b.height=h;let previous=pen;pen=b.getContext('2d');painter();pen=previous;return b}
+function leaf(x,y,size,angle,color){pen.save();pen.translate(x,y);pen.rotate(angle);path([['M',0,0],['C',size*.8,-size*.8,size*1.4,-size*.15,size*1.65,0],['C',size*.9,size*.48,size*.3,size*.25,0,0],['Z']],color);pen.restore()}
+function speckle(seed,count,area,colors,min=.5,max=2){let r=random(seed);for(let i=0;i<count;i++)oval(area[0]+r()*area[2],area[1]+r()*area[3],min+r()*max,min+r()*max*.6,colors[i%colors.length],r()*PI)}
+const paper=layer(()=>{let r=random(101);const data=pen.createImageData(400,225);for(let i=0;i<data.data.length;i+=4){let v=r()<.52?255:0;data.data[i]=data.data[i+1]=data.data[i+2]=v;data.data[i+3]=7+Math.floor(r()*12)}pen.putImageData(data,0,0)},400,225);
+function texture(alpha=.38){pen.save();pen.globalAlpha=alpha;pen.drawImage(paper,0,0,WIDTH,HEIGHT);pen.restore()}
+function render(t){lastTime=t;const s=Math.min(screen.width/WIDTH,screen.height/HEIGHT);g.setTransform(1,0,0,1,0,0);fill(0,0,screen.width,screen.height,background);g.setTransform(s,0,0,s,(screen.width-WIDTH*s)/2,(screen.height-HEIGHT*s)/2);pen=g;pen.save();drawScene(t);pen.restore()}
+function resize(){const d=Math.min(devicePixelRatio||1,2);screen.width=Math.round(innerWidth*d);screen.height=Math.round(innerHeight*d);render(lastTime)}
+window.__renderAt=t=>{manualTime=bound(t,0,20);render(manualTime)};
+window.__resume=()=>{manualTime=null;startTime=null};
+window.__sceneInfo={duration:20,renderer:'Canvas 2D',generation:'Astra Extra High — generation 2',modelRequested:'gpt-6-astra',reasoningEffortRequested:'xhigh',externalAssets:0};
+window.__stateAt=t=>sceneState(bound(t,0,20));
+function tick(now){if(startTime===null)startTime=now;let t=(now-startTime)/1000;if(manualTime!==null)t=manualTime;else t=repeat?t%20:Math.min(20,t);if(t!==lastTime)render(t);requestAnimationFrame(tick)}
+addEventListener('resize',resize);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=performance.now();else if(hiddenAt!==null){if(startTime!==null)startTime+=performance.now()-hiddenAt;hiddenAt=null}});
+
+const background='#253d32',repeat=false;
+function fern(x,y,s,angle=0){pen.save();pen.translate(x,y);pen.rotate(angle);stroke([[0,0],[5,-43*s],[0,-86*s]],'#728654',2*s);for(let j=1;j<10;j++){let yy=-j*8*s,w=Math.sin(j/10*PI)*21*s;for(let d of [-1,1])leaf(3*s,yy,w,d<0?PI-.5:-.5,j%2?'#5b7b4a':'#789057')}pen.restore()}
+const woodland=layer(()=>{fill(0,0,1600,900,linear(0,0,0,900,[[0,'#e9dfac'],[.32,'#b8c59a'],[.71,'#74966c'],[1,'#354f37']]));
+let r=random(737);for(let level=0;level<3;level++){let color=['#a6b994','#819d7d','#638966'][level];for(let j=0;j<17;j++){let x=j*110+r()*35,w=10+level*5;path([['M',x-w,630],['C',x-w*.5,426,x+13,246,x+4,69],['L',x+15,30],['C',x+19,253,x+w,477,x+w,630],['Z']],color);bezier([[x+8,220],[x-25,170],[x-66,146],[x-90,82]],color,w*.75);bezier([[x+8,313],[x+45,241],[x+77,189],[x+105,170]],color,w*.6);oval(x,90,94,85,color,-.4)}}
+polygon([[0,622],[119,597],[350,635],[484,596],[655,618],[853,574],[1056,612],[1255,555],[1600,591],[1600,900],[0,900]],'#769363');
+// A warm winding path is kept clear so the race reads against the lush woods.
+path([['M',0,710],['C',312,540,667,640,969,600],['C',1267,577,1431,613,1600,559],['L',1600,803],['C',1256,823,1125,774,890,822],['C',570,887,293,765,0,897],['Z']],linear(0,620,0,900,[[0,'#ddceaa'],[1,'#b5a17e']]));bezier([[0,707],[312,537],[667,637],[969,597],[1267,574],[1431,610],[1600,556]],'#e7d9b7',5);
+for(let i=0;i<1400;i++){let x=r()*1600,y=620+r()*270;oval(x,y,.3+r()*1.4,.3+r()*.7,'rgba(107,88,56,.12)')}
+// Soft paint marks form bushes; leaf veins and grasses sit above them.
+for(let clump of [[100,538,170],[364,574,130],[746,575,110],[1020,534,150],[1447,530,170]]){let [x,y,size]=clump;for(let j=0;j<140;j++){let a=r()*TAU,rr=Math.sqrt(r())*size;oval(x+Math.cos(a)*rr,y+Math.sin(a)*rr*.47,6+r()*17,4+r()*11,['rgba(52,91,51,.17)','rgba(179,193,117,.22)','rgba(105,143,76,.27)'][j%3],r()*PI)}}
+for(let i=0;i<1100;i++){let x=r()*1600,y=r()*560;let a=r()*TAU;leaf(x,y,3+r()*8,a,['rgba(222,220,158,.17)','rgba(65,107,65,.16)','rgba(187,207,147,.17)'][i%3])}
+// A gnarled foreground trunk and roots anchor the sleeping hare's shade.
+path([['M',26,828],['C',115,704,121,480,97,190],['L',74,0],['L',205,0],['C',158,263,190,532,211,739],['L',270,786],['L',197,782],['L',145,817],['L',93,793],['Z']],linear(66,0,222,0,[[0,'#243e31'],[.47,'#53664a'],[.73,'#3d573c'],[1,'#293f30']]));
+bezier([[143,270],[212,198],[294,180],[360,83]],'#3f573b',37);bezier([[138,350],[77,230],[33,181],[-20,155]],'#354d34',30);
+for(let j=0;j<15;j++){let x=97+j*7;bezier([[x,27],[x-23,278],[x+17,540],[x-11,756]],j%3?'rgba(152,155,97,.25)':'rgba(15,37,28,.32)',1.8)}oval(153,452,20,40,'#314b34',-.07,'#78845a',2);bezier([[152,424],[134,461],[160,476],[162,489]],'#223b2c',3);
+for(let j=0;j<18;j++){let x=j*96-40;oval(x,42+(j%4)*12,90,58,['#3e623e','#4e7144','#759153'][j%3],Math.sin(j)*.4)}
+// Flowers and ferns are hand-drawn; no bitmaps are loaded.
+for(let j=0;j<18;j++)fern(35+j*91,882+(j%3)*8,.6+(j%4)*.13,(j%2?1:-1)*.2);
+for(let j=0;j<57;j++){let x=20+j*29,y=820+(j*47)%80;if(x>360&&x<1430&&j%2)continue;let h=19+(j*13)%44;stroke([[x,y],[x-5,y-h]],'#486540',1.8);for(let k=0;k<5;k++){let a=k*TAU/5;oval(x-5+Math.cos(a)*4,y-h+Math.sin(a)*4,4,2.5,j%3?'#e2be91':'#c48c80',a)}oval(x-5,y-h,2.2,2.2,'#b48c52')}
+// Slanted posts span the race path; a pennant banner and chalk line mark the finish.
+for(let [x,y] of [[1164,604],[1260,809]]){stroke([[x,y],[x,y-215]],'#68543e',9);stroke([[x-2,y-3],[x-2,y-215]],'#bd9f70',2);oval(x,y-218,6,6,'#a1845a')}
+bezier([[1164,408],[1201,487],[1227,551],[1260,594]],'#6f5b40',2);for(let j=0;j<8;j++){let x=1170+j*11.5,y=419+j*22.7;polygon([[x-5,y],[x+5,y+16],[x-17,y+24]],j%2?'#b8654d':'#edd59b')}
+stroke([[1164,604],[1260,809]],'rgba(249,236,203,.75)',7);
+// Slanting afternoon light passes through the canopy.
+polygon([[1180,0],[1270,0],[654,714],[544,735]],'rgba(255,241,182,.075)');polygon([[1330,0],[1384,0],[841,713],[754,723]],'rgba(255,239,185,.07)');
+});
+function tortoise(x,y,t,won){pen.save();pen.translate(x,y);const step=Math.sin(t*6.7),body=linear(-70,-40,100,22,[[0,'#607449'],[.55,'#a7b57b'],[1,'#b5c38a']]);oval(0,17,99,14,'rgba(42,58,32,.2)');
+for(let leg of [[-52,-4,-1],[-19,2,1],[35,-1,-1],[62,-3,1]]){let [xx,yy,d]=leg;path([['M',xx-9,yy-6],['Q',xx+13,yy-2,xx+12+step*d*6,yy+15],['Q',xx+2+step*d*6,yy+22,xx-13+step*d*6,yy+17],['Z']],body,'#536b42',1);for(let j=0;j<3;j++)stroke([[xx-9+j*5+step*d*6,yy+15],[xx-8+j*5+step*d*6,yy+19]],'#dbd19e',1.4)}
+polygon([[-82,-7],[-112,-12],[-92,3]],'#7a9059');oval(-8,-34,88,59,linear(-85,-85,73,9,[[0,'#9dac68'],[.24,'#b4ba77'],[.55,'#788c50'],[1,'#4b653b']]),-.03,'#3f5d39',3);
+pen.save();pen.beginPath();pen.ellipse(-8,-34,84,56,-.03,0,TAU);pen.clip();const cells=[[-61,-43,22],[-25,-62,27],[19,-60,25],[54,-41,23],[-44,-8,24],[1,-17,28],[41,-4,22]];for(let [xx,yy,sz]of cells){const p=[];for(let j=0;j<6;j++){let a=j*TAU/6+.2;p.push([xx+Math.cos(a)*sz,yy+Math.sin(a)*sz*.84])}polygon(p,null,'#4a653a',3);stroke(p.slice(0,4).map(p=>[p[0]+2,p[1]+2]),'rgba(224,214,144,.49)',1.4);for(let k=1;k<3;k++){let pp=p.map(p=>[lerp(xx,p[0],k*.25),lerp(yy,p[1],k*.25)]);polygon(pp,null,'rgba(64,89,49,.15)',1)}}let r=random(770);for(let i=0;i<330;i++)oval(r()*175-95,r()*115-92,.4+r()*1.2,.4,'rgba(237,218,149,.19)');pen.restore();
+bezier([[-93,-13],[-59,19],[28,26],[75,-9]],'#c9ba7e',8);bezier([[-92,-10],[-54,24],[35,27],[79,-7]],'#526d3d',2);
+let headLift=won*5;path([['M',63,-13],['C',85,-19,82,-41-headLift,100,-43-headLift],['L',119,-15-headLift],['Q',88,13,69,5],['Z']],body,'#5a7344',1.5);oval(115,-37-headLift,35,28,body,-.15,'#597645',1.4);oval(120,-48-headLift,11,14,'#f3edcd',-.1);oval(124,-49-headLift,4.8,7,'#273c2d');oval(125,-52-headLift,1.7,2.3,'#fffceb');oval(143,-37-headLift,2.6,2,'#516741');bezier([[105,-26-headLift],[118,-14-headLift],[140,-24-headLift],[146,-31-headLift]],'#4a643b',2.4);oval(105,-32-headLift,7,4,'rgba(191,166,104,.4)');for(let j=0;j<4;j++)oval(97+j*6,-16-headLift,1,1,'#c5c88e');pen.restore()}
+function hare(x,y,t){const waking=tween(t,5.6,8),running=tween(t,8,8.8)*(1-tween(t,15.9,17.7)),brake=tween(t,15.9,17.7),phase=t*15,hop=running*Math.abs(Math.sin(phase))*22;pen.save();pen.translate(x,y);oval(0,15,87,13,'rgba(46,52,32,.19)');pen.translate(0,-hop);
+// The sleeping pose continuously unfolds into an upright runner.
+let torsoAngle=lerp(-1.16,.17,waking)+running*.24-brake*.27;pen.save();pen.translate(0,lerp(-16,-63,waking));pen.rotate(torsoAngle);oval(0,0,37,66,linear(-32,0,36,0,[[0,'#ad8d69'],[.42,'#d1b38a'],[1,'#b4926c']]),0,'#806849',1.5);oval(15,-4,21,49,'#e4cfaa');pen.restore();oval(-43,-24-hop*.15,17,19,'#e9d8b9',-.15,'#b29a77',1);
+if(waking>.1){for(let d of [-1,1]){let k=Math.sin(phase+d)*running;let h=[d*15,-35],knee=[d*27+k*28,-9],foot=[d*32-k*35,7];stroke([h,knee,foot],'#8b7152',15);stroke([h,knee,foot],'#c7a97f',11);oval(foot[0]+7,foot[1]+2,20,7,'#d9bd94',-.05,'#957a58',1);stroke([[d*13,-94],[d*37+Math.sin(phase)*running*24,-70],[d*48+Math.sin(phase)*running*27,-93]],'#b99a71',11)}}else{oval(28,7,40,10,'#dcc29a');oval(-22,5,30,9,'#bfa078')}
+let headX=lerp(53,15,waking),headY=lerp(-41,-138,waking);pen.save();pen.translate(headX,headY);pen.rotate(running*.2-brake*.12);
+let earA=lerp(-1.04,-.15,waking)+Math.sin(phase)*running*.12,earB=lerp(-.56,.2,waking)-Math.sin(phase)*running*.1;for(let [xx,angle,length]of [[-13,earA,65],[15,earB,73]]){pen.save();pen.translate(xx,-20);pen.rotate(angle);oval(0,-length*.64,12,length*.68,linear(-12,0,12,0,[[0,'#b8956b'],[.5,'#dfc29a'],[1,'#b18c63']]));oval(1,-length*.68,5.5,length*.53,'#c58e7b');stroke([[-7,-length],[1,-length*1.17],[7,-length]],'rgba(244,224,188,.55)',1);pen.restore()}
+path([['M',-30,-5],['C',-37,-27,-21,-47,3,-43],['C',27,-44,37,-22,34,1],['C',41,9,23,23,5,22],['C',-12,25,-27,13,-30,-5],['Z']],linear(-32,-35,32,25,[[0,'#dfc29b'],[.55,'#c8a67a'],[1,'#b99165']]),'#99774e',1.5);
+for(let j=0;j<11;j++){let xx=-30+j*5;stroke([[xx,-28+Math.sin(j)*3],[xx+3,-33+Math.sin(j)*3]],'#e3cba8',1.5)}
+if(waking<.28){bezier([[9,-11],[17,-5],[23,-5],[29,-11]],'#665039',2.5)}else{let panic=t<9||t>16.8;for(let [xx,yy]of [[5,-18],[26,-16]]){oval(xx,yy,10,panic?15:12,'#f7efd7',-.14);oval(xx+4,yy-1,4.2,panic?7:5.6,'#304033');oval(xx+5,yy-4,1.3,2,'#fffceb')}bezier([[-3,-35],[4,-39],[11,-37],[14,-34]],'#8a6643',2);if(panic)oval(22,17,9,12,'#78503b');else bezier([[9,11],[20,17],[29,12],[34,5]],'#785138',2);if(t>17)fill(18,8,8,5,'#f4e9cc')}
+oval(37,0,17,12,'#ebd4ae',-.14);oval(49,-5,5.7,4.2,'#725139');for(let j=0;j<3;j++)stroke([[39,5+j*2],[69,1+j*6]],'#806a4a',.8);pen.restore();
+if(t<5.6){let breath=(Math.sin(t*2.6)+1)*.5;oval(71,-28,4+breath*2,3,'rgba(228,210,165,.15)')}pen.restore()}
+function sceneState(t){const tortoiseX=t<15.2?lerp(574,1074,tween(t,0,15.2)):lerp(1074,1360,tween(t,15.2,19));const hareX=t<8?367:t<16.6?lerp(367,1121,tween(t,8,16.6)):lerp(1121,1212,tween(t,16.6,17.9));return {time:t,tortoiseX,hareX,tortoiseFinish:15.2,hareFinish:16.6,winner:'tortoise'}}
+function drawScene(t){let s=sceneState(t);pen.drawImage(woodland,0,0);let q=tween(t,15.2,17);hare(s.hareX,624,t);tortoise(s.tortoiseX,716,Math.min(t,19),q);
+if(t>16&&t<18.4){let r=random(184);for(let j=0;j<18;j++){let age=(t-16.1+j*.025);if(age>0&&age<2){pen.globalAlpha=(1-age/2)*.14;oval(s.hareX-20-age*23-r()*32,639-age*8,5+age*8,3+age*4,'#d2bd91')}}pen.globalAlpha=1;stroke([[s.hareX-75,636],[s.hareX-12,634]],'rgba(132,108,74,.3)',2)}
+if(t>15.2){let a=tween(t,15.2,16.3)*(1-tween(t,18.4,20));for(let j=0;j<7;j++){let angle=j*TAU/7;pen.globalAlpha=a*.8;leaf(s.tortoiseX+Math.cos(angle)*56,614+Math.sin(angle)*25,3,angle,'#e4c87e')}pen.globalAlpha=1}
+for(let j=0;j<25;j++){let x=(j*177)%1600+Math.sin(t*.6+j)*12,y=170+(j*91)%403+Math.cos(t*.47+j)*9;pen.globalAlpha=.25;oval(x,y,1.5,2,'#fff0b5')}pen.globalAlpha=1;texture(.28)}
+
+window.__sceneInfo.loop=repeat;resize();requestAnimationFrame(tick);
+</script></body></html>

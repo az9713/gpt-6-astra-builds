@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generation" content="Astra Extra High, generation 2"><title>Golden Gate, Joining the Span</title><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#161d21}canvas{display:block;width:100vw;height:100vh}</style></head><body><canvas role="img" aria-label="Golden Gate, Joining the Span. A twenty-second original Canvas animation."></canvas><script>
+'use strict';
+const screen=document.querySelector('canvas'),g=screen.getContext('2d',{alpha:false});
+const WIDTH=1600,HEIGHT=900,PI=Math.PI,TAU=PI*2;
+let pen=g,manualTime=null,startTime=null,lastTime=0,hiddenAt=null;
+const bound=(v,l=0,h=1)=>Math.max(l,Math.min(h,v));
+const lerp=(a,b,u)=>a+(b-a)*u;
+const smooth=u=>{u=bound(u);return u*u*(3-2*u)};
+const tween=(t,a,b)=>smooth((t-a)/(b-a));
+const random=seed=>()=>((seed=(Math.imul(1664525,seed)+1013904223)>>>0)/4294967296);
+function fill(x,y,w,h,color){pen.fillStyle=color;pen.fillRect(x,y,w,h)}
+function oval(x,y,rx,ry,color,rotation=0,stroke=null,width=1){pen.beginPath();pen.ellipse(x,y,Math.max(.01,rx),Math.max(.01,ry),rotation,0,TAU);if(color){pen.fillStyle=color;pen.fill()}if(stroke){pen.strokeStyle=stroke;pen.lineWidth=width;pen.stroke()}}
+function polygon(points,color,stroke=null,width=1){pen.beginPath();points.forEach((p,i)=>i?pen.lineTo(...p):pen.moveTo(...p));pen.closePath();if(color){pen.fillStyle=color;pen.fill()}if(stroke){pen.strokeStyle=stroke;pen.lineWidth=width;pen.stroke()}}
+function stroke(points,color,width=1){pen.beginPath();points.forEach((p,i)=>i?pen.lineTo(...p):pen.moveTo(...p));pen.strokeStyle=color;pen.lineWidth=width;pen.lineCap='round';pen.lineJoin='round';pen.stroke()}
+function bezier(points,color,width=1){pen.beginPath();pen.moveTo(...points[0]);for(let j=1;j<points.length;j+=3)pen.bezierCurveTo(...points[j],...points[j+1],...points[j+2]);pen.strokeStyle=color;pen.lineWidth=width;pen.lineCap='round';pen.stroke()}
+function path(commands,color,edge=null,width=1){pen.beginPath();for(const q of commands){if(q[0]==='M')pen.moveTo(q[1],q[2]);else if(q[0]==='L')pen.lineTo(q[1],q[2]);else if(q[0]==='C')pen.bezierCurveTo(...q.slice(1));else if(q[0]==='Q')pen.quadraticCurveTo(...q.slice(1));else if(q[0]==='Z')pen.closePath()}if(color){pen.fillStyle=color;pen.fill()}if(edge){pen.strokeStyle=edge;pen.lineWidth=width;pen.lineJoin='round';pen.stroke()}}
+function linear(x,y,x2,y2,colors){const a=pen.createLinearGradient(x,y,x2,y2);colors.forEach(p=>a.addColorStop(...p));return a}
+function radial(x,y,r,colors){const a=pen.createRadialGradient(x,y,0,x,y,r);colors.forEach(p=>a.addColorStop(...p));return a}
+function layer(painter,w=WIDTH,h=HEIGHT){let b=document.createElement('canvas');b.width=w;b.height=h;let previous=pen;pen=b.getContext('2d');painter();pen=previous;return b}
+function leaf(x,y,size,angle,color){pen.save();pen.translate(x,y);pen.rotate(angle);path([['M',0,0],['C',size*.8,-size*.8,size*1.4,-size*.15,size*1.65,0],['C',size*.9,size*.48,size*.3,size*.25,0,0],['Z']],color);pen.restore()}
+function speckle(seed,count,area,colors,min=.5,max=2){let r=random(seed);for(let i=0;i<count;i++)oval(area[0]+r()*area[2],area[1]+r()*area[3],min+r()*max,min+r()*max*.6,colors[i%colors.length],r()*PI)}
+const paper=layer(()=>{let r=random(101);const data=pen.createImageData(400,225);for(let i=0;i<data.data.length;i+=4){let v=r()<.52?255:0;data.data[i]=data.data[i+1]=data.data[i+2]=v;data.data[i+3]=7+Math.floor(r()*12)}pen.putImageData(data,0,0)},400,225);
+function texture(alpha=.38){pen.save();pen.globalAlpha=alpha;pen.drawImage(paper,0,0,WIDTH,HEIGHT);pen.restore()}
+function render(t){lastTime=t;const s=Math.min(screen.width/WIDTH,screen.height/HEIGHT);g.setTransform(1,0,0,1,0,0);fill(0,0,screen.width,screen.height,background);g.setTransform(s,0,0,s,(screen.width-WIDTH*s)/2,(screen.height-HEIGHT*s)/2);pen=g;pen.save();drawScene(t);pen.restore()}
+function resize(){const d=Math.min(devicePixelRatio||1,2);screen.width=Math.round(innerWidth*d);screen.height=Math.round(innerHeight*d);render(lastTime)}
+window.__renderAt=t=>{manualTime=bound(t,0,20);render(manualTime)};
+window.__resume=()=>{manualTime=null;startTime=null};
+window.__sceneInfo={duration:20,renderer:'Canvas 2D',generation:'Astra Extra High — generation 2',modelRequested:'gpt-6-astra',reasoningEffortRequested:'xhigh',externalAssets:0};
+window.__stateAt=t=>sceneState(bound(t,0,20));
+function tick(now){if(startTime===null)startTime=now;let t=(now-startTime)/1000;if(manualTime!==null)t=manualTime;else t=repeat?t%20:Math.min(20,t);if(t!==lastTime)render(t);requestAnimationFrame(tick)}
+addEventListener('resize',resize);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=performance.now();else if(hiddenAt!==null){if(startTime!==null)startTime+=performance.now()-hiddenAt;hiddenAt=null}});
+
+const background='#174454',repeat=false;
+const vermilion='#c35838',rustShadow='#793e32',steelLight='#f39a66';
+const road=x=>645-.129*x;
+const bayBackdrop=layer(()=>{fill(0,0,1600,900,linear(0,0,0,900,[[0,'#f4d9a3'],[.48,'#ecca95'],[.481,'#7ba99e'],[1,'#1d586b']]));oval(1280,160,66,66,'#f7e5b8');
+path([['M',0,423],['L',96,357],['L',165,362],['L',248,259],['L',338,279],['L',422,355],['L',584,430],['Z']],'#3e7772');path([['M',0,423],['L',170,375],['L',251,279],['L',287,318],['L',393,350],['L',464,403],['L',580,430],['Z']],'#71958a');polygon([[0,430],[137,391],[277,387],[330,416],[486,435]],'#afaf83');
+path([['M',1090,421],['L',1190,391],['L',1270,393],['L',1350,368],['L',1490,383],['L',1600,350],['L',1600,451],['L',1090,451],['Z']],'#96afa0');for(let j=0;j<39;j++){let x=1195+j*11,h=6+(j*17)%28;fill(x,420-h,7,h,'#c4bea0');if(j%5===0)fill(x+2,415-h,3,5,'#c4bea0')}
+// Steep headlands and a sunlit coastal shelf frame the nearest anchorage.
+polygon([[0,671],[94,623],[194,615],[279,566],[389,588],[482,674],[421,735],[317,752],[164,702],[0,783]],'#285958');polygon([[0,671],[98,640],[192,633],[282,588],[352,613],[295,651],[203,672],[111,663],[0,715]],'#b4b68a');polygon([[0,726],[85,704],[156,721],[264,706],[319,753],[156,735],[0,783]],'#477e72');
+let r=random(827);for(let i=0;i<710;i++){let x=r()*1600,y=439+r()*461,w=(3+r()*24)*(1+(y-440)/460);stroke([[x,y],[x+w,y]],i%4?'rgba(179,208,174,.14)':'rgba(255,224,163,.25)',.6+r()*1.2)}
+for(let i=0;i<6;i++){let x=90+i*265;bezier([[x,127],[x+65,112],[x+133,124],[x+193,117]],'rgba(249,232,192,.27)',7)}
+});
+function tower(x,height,scale){let y=road(x),w=39*scale,leg=18*scale;const bottom=y+113*scale;for(let side of [-1,1]){let xx=x+side*w;polygon([[xx-leg,bottom],[xx+leg,bottom],[xx+leg*.73,y-height],[xx-leg*.73,y-height]],linear(xx-leg,0,xx+leg,0,[[0,steelLight],[.19,vermilion],[.68,vermilion],[1,rustShadow]]),rustShadow,1);stroke([[xx-leg*.77,bottom-5],[xx-leg*.6,y-height+5]],'#e98656',2*scale);fill(xx-leg*.7,y-height-8*scale,leg*1.4,8*scale,'#cc6843');}
+for(let q of [0,.22,.46,.7,.95]){let yy=y-height*q;fill(x-w,yy-8*scale,w*2,13*scale,vermilion);fill(x-w,yy-8*scale,w*2,2*scale,steelLight);if(q!==0)bezier([[x-w+leg,yy+18*scale],[x-w+leg,yy-2*scale],[x+w-leg,yy-2*scale],[x+w-leg,yy+18*scale]],vermilion,8*scale)}
+fill(x-w-25*scale,bottom,2*w+50*scale,20*scale,'#c3b28b');fill(x-w-25*scale,bottom+19*scale,2*w+50*scale,5*scale,'#4b776c');}
+function cableHeight(x){if(x<430){let u=(x-15)/415;return lerp(road(15)-4,road(430)-374,u)-44*Math.sin(u*PI)}if(x<=1220){let u=(x-430)/790;return lerp(road(430)-374,road(1220)-292,u)+256*4*u*(1-u)}let u=(x-1220)/370;return lerp(road(1220)-292,road(1590)-5,u)-21*Math.sin(u*PI)}
+function deckTruss(a,b,offset=0){let top=x=>road(x)+offset;polygon([[a,top(a)],[b,top(b)],[b,top(b)+29],[a,top(a)+29]],rustShadow);polygon([[a,top(a)-8],[b,top(b)-8],[b+10,top(b)],[a+10,top(a)]],'#bfa27a');stroke([[a,top(a)],[b,top(b)]],steelLight,3.1);stroke([[a,top(a)+29],[b,top(b)+29]],'#aa4e35',3);
+for(let x=a;x<b-2;x+=24){let end=Math.min(b,x+24);stroke([[x,top(x)+27],[end,top(end)+2]],vermilion,3);stroke([[x,top(x)+2],[x,top(x)+27]],'#d8774a',2);for(let yy of [4,24])oval(x+2,top(x)+yy,1.1,1.1,'#f1ae75')}
+}
+function derrick(x,direction){let y=road(x)-7;stroke([[x-19,y],[x-13,y-111],[x+1,y-111],[x+11,y]],'#394945',3);for(let k=0;k<5;k++)stroke([[x-16+k*.8,y-20-k*18],[x+9-k*1.5,y-39-k*18],[x-15+k*.8,y-39-k*18]],'#8a815e',1.2);let tip=x+direction*89;stroke([[x-7,y-108],[tip,y-147],[tip+direction*5,y-137],[x+7,y-82]],'#3b4b46',3);stroke([[x-8,y-109],[tip,y-145]],'#d2b582',1);for(let j=0;j<6;j++){let q=j/6;stroke([[lerp(x-5,tip,q),lerp(y-108,y-145,q)],[lerp(x+5,tip+direction*5,q+.08),lerp(y-83,y-137,q+.08)]],'#9b9269',1)}stroke([[x-7,y-108],[x-direction*39,y]],'#6a7159',1.2);return [tip,y-145]}
+function steelworker(x,y,s,t,index){pen.save();pen.translate(x,y);pen.scale(s,s);let lean=index%2?-.1:.1;pen.rotate(lean);stroke([[-3,-12],[-5,0]],'#394c4b',3.8);stroke([[3,-12],[5,0]],'#394c4b',3.8);polygon([[-5,-29],[5,-29],[7,-12],[-6,-12]],index%3===0?'#d1b583':'#728d85');stroke([[-4,-27],[1,-13],[5,-27]],'#405b59',1);oval(0,-35,4.5,5.5,'#dfbb85');path([['M',-6,-39],['Q',-5,-46,2,-44],['Q',7,-43,6,-39],['Z']],'#c5b68b');stroke([[-8,-39],[8,-39]],'#dbca9a',1.5);let arm=t<7?Math.sin(t*2.7+index)*4:t<10?Math.sin(t*14+index)*3:0;stroke([[-4,-26],[-11,-18],[-15,-22-arm]],'#cdad7b',2.8);stroke([[5,-26],[11,-29],[13,-35-arm]],'#dbbb85',2.8);pen.restore()}
+function tugboat(x,y,t){pen.save();pen.translate(x,y);polygon([[-43,0],[40,0],[28,13],[-24,13]],'#1b4148');fill(-23,-16,48,16,'#d9c695');fill(-12,-29,19,13,'#b59365');fill(-4,-43,8,18,'#394f4c');fill(11,-25,5,10,'#54756e');stroke([[-33,1],[33,1]],'#f0dab0',2);stroke([[-43,9],[-79,16],[-107,14]],'rgba(225,222,182,.48)',2);for(let i=0;i<5;i++){let age=(t*.35+i*.2)%1;pen.globalAlpha=(1-age)*.17;oval(-age*42,-47-age*29,6+age*14,3+age*9,'#d8d4b5')}pen.globalAlpha=1;pen.restore()}
+function sceneState(t){return {time:t,placement:tween(t,0,7.3),pullback:tween(t,9.5,19.4),scale:lerp(4.8,1,tween(t,9.5,19.4)),sectionOffset:lerp(-86,0,tween(t,0,7.3))}}
+function drawScene(t){let s=sceneState(t),cx=lerp(808,800,s.pullback),cy=lerp(481,450,s.pullback);pen.save();pen.translate(800,450);pen.scale(s.scale,s.scale);pen.translate(-cx,-cy);pen.drawImage(bayBackdrop,0,0);
+for(let i=0;i<140;i++){let xx=(i*167.13)%1600,yy=450+(i*73.37)%442,a=Math.pow(Math.max(0,Math.sin(t*1.4+i*4.11)),7);pen.globalAlpha=a*.65;stroke([[xx-3,yy],[xx+3+i%5,yy]],'#ffe7a8',1.2);if(a>.7)stroke([[xx,yy-2],[xx,yy+2]],'#ffe7a8',.8)}pen.globalAlpha=1;tugboat(1090,730,t);
+// Two suspension cables and their hangers share exactly the same geometric curve.
+for(let off of [-9,9]){let p=[];for(let x=15;x<=1590;x+=5)p.push([x,cableHeight(x)+off]);stroke(p,vermilion,4);stroke(p.map(a=>[a[0],a[1]-1]),'#f09059',1);for(let x=39;x<1580;x+=26)stroke([[x,cableHeight(x)+off],[x,road(x)-2+off*.2]],'#a34d35',1.15)}
+tower(430,374,1);tower(1220,292,.81);
+deckTruss(15,754);deckTruss(861,1590);deckTruss(754,861,s.sectionOffset);
+let a=derrick(716,1),b=derrick(905,-1);for(let p of [[a,779],[b,840]]){stroke([p[0],[p[1],road(p[1])+s.sectionOffset-9]],'#4c594c',1.3);oval(p[1],road(p[1])+s.sectionOffset-11,2,3,'#4d5141')}
+// Guide ropes and work crews keep the close-up active from its first frame.
+for(let j=0;j<3;j++){let x=721+j*9,y=road(x)-9;steelworker(x,y,.79,t,j);stroke([[x+10,y-16],[771,road(771)+s.sectionOffset-8]],'#d7bb84',.9)}for(let j=0;j<3;j++){let x=873+j*11,y=road(x)-9;steelworker(x,y,.79,t,j+4);stroke([[x-10,y-18],[846,road(846)+s.sectionOffset-8]],'#d4b681',.9)}
+if(t>7.4&&t<9.3){let pulse=Math.max(0,Math.sin(t*23));for(let k=0;k<7;k++){let xx=756+(k%2)*104,yy=road(xx);stroke([[xx,yy],[xx+Math.cos(k*2.1)*pulse*5,yy-Math.abs(Math.sin(k*2.1))*pulse*5]],'#e8b260',.7)}}
+pen.restore();texture(.27)}
+
+window.__sceneInfo.loop=repeat;resize();requestAnimationFrame(tick);
+</script></body></html>
