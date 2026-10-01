@@ -1,0 +1,192 @@
+{
+  "samples": 201,
+  "minimumObstacleClearance": 9.851766,
+  "minimumAt": 0,
+  "maxAnchorMismatch": 7.337557957613285e-15,
+  "minimumConservativeNdcMargin": 0.15037500000000004,
+  "maximumCameraStepPerPointOneSeconds": 0.32364906543044203,
+  "backwardSeek": "all object and instance transforms identical",
+  "finalHold": "all object and instance transforms identical",
+  "keyframes": [
+    {
+      "t": 0,
+      "phase": "the cheering launch square",
+      "height": 1.55,
+      "cityReveal": 0,
+      "assemblyPosition": [
+        0,
+        1.55,
+        18
+      ],
+      "anchorMismatch": 3.66205343881779e-15,
+      "attachmentCount": 12,
+      "minimumObstacleClearance": 9.851766,
+      "nearestObstacle": "tree-8",
+      "assemblyGroundClearance": 1.777565,
+      "conservativeHeroScreenBounds": {
+        "left": -0.389746,
+        "right": 0.311156,
+        "bottom": -0.849625,
+        "top": 0.795876
+      },
+      "heroFullyInFrame": true,
+      "buildingCount": 777,
+      "crowdCount": 215,
+      "cameraPosition": [
+        7.297944,
+        8.9,
+        40.022262
+      ],
+      "cameraTarget": [
+        0,
+        7.15,
+        18
+      ],
+      "clearanceMethod": "transformed rendered-geometry AABBs, including roofs, cornices, dormers, chimneys, bridge and trees"
+    },
+    {
+      "t": 4,
+      "phase": "clearing the slate rooftops",
+      "height": 4.618,
+      "cityReveal": 0.01123,
+      "assemblyPosition": [
+        0,
+        4.618,
+        18
+      ],
+      "anchorMismatch": 3.6687789788066426e-15,
+      "attachmentCount": 12,
+      "minimumObstacleClearance": 10.057942,
+      "nearestObstacle": "tree-9",
+      "assemblyGroundClearance": 4.809781,
+      "conservativeHeroScreenBounds": {
+        "left": -0.38022,
+        "right": 0.28253,
+        "bottom": -0.841999,
+        "top": 0.802524
+      },
+      "heroFullyInFrame": true,
+      "buildingCount": 777,
+      "crowdCount": 215,
+      "cameraPosition": [
+        7.379355,
+        12.06009,
+        40.068546
+      ],
+      "cameraTarget": [
+        0,
+        10.218,
+        17.988208
+      ],
+      "clearanceMethod": "transformed rendered-geometry AABBs, including roofs, cornices, dormers, chimneys, bridge and trees"
+    },
+    {
+      "t": 10,
+      "phase": "the river unfolds",
+      "height": 16.3,
+      "cityReveal": 0.406738,
+      "assemblyPosition": [
+        -1.625656,
+        16.3,
+        14.827988
+      ],
+      "anchorMismatch": 3.972054645195637e-15,
+      "attachmentCount": 12,
+      "minimumObstacleClearance": 15.712766,
+      "nearestObstacle": "tree-7",
+      "assemblyGroundClearance": 16.51832,
+      "conservativeHeroScreenBounds": {
+        "left": -0.346915,
+        "right": 0.279188,
+        "bottom": -0.783109,
+        "top": 0.602887
+      },
+      "heroFullyInFrame": true,
+      "buildingCount": 777,
+      "crowdCount": 215,
+      "cameraPosition": [
+        8.806675,
+        26.985254,
+        38.339184
+      ],
+      "cameraTarget": [
+        -1.625656,
+        21.9,
+        14.400913
+      ],
+      "clearanceMethod": "transformed rendered-geometry AABBs, including roofs, cornices, dormers, chimneys, bridge and trees"
+    },
+    {
+      "t": 16,
+      "phase": "the river unfolds",
+      "height": 27.982,
+      "cityReveal": 0.907715,
+      "assemblyPosition": [
+        -6.574344,
+        27.982,
+        5.172012
+      ],
+      "anchorMismatch": 3.76822190084106e-15,
+      "attachmentCount": 12,
+      "minimumObstacleClearance": 22.882846,
+      "nearestObstacle": "roof-1-104",
+      "assemblyGroundClearance": 28.180103,
+      "conservativeHeroScreenBounds": {
+        "left": -0.343312,
+        "right": 0.275608,
+        "bottom": -0.73706,
+        "top": 0.551465
+      },
+      "heroFullyInFrame": true,
+      "buildingCount": 777,
+      "crowdCount": 215,
+      "cameraPosition": [
+        8.193926,
+        42.775262,
+        29.929679
+      ],
+      "cameraTarget": [
+        -6.574344,
+        33.582,
+        4.218911
+      ],
+      "clearanceMethod": "transformed rendered-geometry AABBs, including roofs, cornices, dormers, chimneys, bridge and trees"
+    },
+    {
+      "t": 20,
+      "phase": "above the city",
+      "height": 31.05,
+      "cityReveal": 1,
+      "assemblyPosition": [
+        -8.2,
+        31.05,
+        2
+      ],
+      "anchorMismatch": 7.32410687763558e-15,
+      "attachmentCount": 12,
+      "minimumObstacleClearance": 25.290879,
+      "nearestObstacle": "roof-1-104",
+      "assemblyGroundClearance": 31.258445,
+      "conservativeHeroScreenBounds": {
+        "left": -0.367878,
+        "right": 0.275457,
+        "bottom": -0.738692,
+        "top": 0.544839
+      },
+      "heroFullyInFrame": true,
+      "buildingCount": 777,
+      "crowdCount": 215,
+      "cameraPosition": [
+        7.416874,
+        46.6,
+        26.9093
+      ],
+      "cameraTarget": [
+        -8.2,
+        36.65,
+        0.95
+      ],
+      "clearanceMethod": "transformed rendered-geometry AABBs, including roofs, cornices, dormers, chimneys, bridge and trees"
+    }
+  ]
+}

@@ -1,0 +1,423 @@
+{
+  "environment": "Edge 154.0.4258.48, Intel gen-12lp laptop; scenes run separately",
+  "desktopViewport": [
+    1600,
+    900
+  ],
+  "portraitViewport": [
+    390,
+    844
+  ],
+  "portraitCanvas": [
+    390,
+    219
+  ],
+  "measure": "Actual render submissions per elapsed playback time; CPU submission is not GPU duration. Renderer memory counters are not total browser memory. Portrait is a desktop-browser viewport, not a physical phone.",
+  "records": [
+    {
+      "scene": "01-trojan-vase",
+      "backend": "WebGPU",
+      "quality": "desktop",
+      "fps": 59.98050633544098,
+      "cpuSubmitP95Ms": 6.099999999627471,
+      "drawCalls": 20,
+      "renderedTriangles": 177795,
+      "framebuffer": [
+        1600,
+        900
+      ],
+      "playbackSeconds": 22,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 10
+    },
+    {
+      "scene": "01-trojan-vase",
+      "backend": "WebGL 2",
+      "quality": "desktop",
+      "fps": 27.940023767984023,
+      "cpuSubmitP95Ms": 9.299999999813735,
+      "drawCalls": 20,
+      "renderedTriangles": 177795,
+      "framebuffer": [
+        1600,
+        900
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 10
+    },
+    {
+      "scene": "01-trojan-vase",
+      "backend": "WebGPU",
+      "quality": "mobile",
+      "fps": 29.97880160054187,
+      "cpuSubmitP95Ms": 2.5,
+      "drawCalls": 20,
+      "renderedTriangles": 177795,
+      "framebuffer": [
+        390,
+        219
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 10
+    },
+    {
+      "scene": "01-trojan-vase",
+      "backend": "WebGL 2",
+      "quality": "mobile",
+      "fps": 29.304769603880356,
+      "cpuSubmitP95Ms": 2.1000000005587935,
+      "drawCalls": 20,
+      "renderedTriangles": 177795,
+      "framebuffer": [
+        390,
+        219
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 10
+    },
+    {
+      "scene": "02-sisyphus-relief",
+      "backend": "WebGPU",
+      "quality": "desktop",
+      "fps": 59.8832459275285,
+      "cpuSubmitP95Ms": 5.100000000093132,
+      "drawCalls": 40,
+      "renderedTriangles": 199781,
+      "framebuffer": [
+        1600,
+        900
+      ],
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "verificationBasis": "Previously verified pilot, all eleven src files byte-identical; reloaded and captured in collection."
+    },
+    {
+      "scene": "02-sisyphus-relief",
+      "backend": "WebGL 2",
+      "quality": "desktop",
+      "fps": 38.58996113635119,
+      "cpuSubmitP95Ms": 3.5999999998603016,
+      "drawCalls": 40,
+      "renderedTriangles": 199781,
+      "framebuffer": [
+        1600,
+        900
+      ],
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "verificationBasis": "Previously verified pilot, all eleven src files byte-identical; reloaded and captured in collection."
+    },
+    {
+      "scene": "02-sisyphus-relief",
+      "backend": "WebGPU",
+      "quality": "mobile",
+      "fps": 30.000732842328976,
+      "cpuSubmitP95Ms": 3,
+      "drawCalls": 40,
+      "renderedTriangles": 199781,
+      "framebuffer": [
+        390,
+        219
+      ],
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "verificationBasis": "Previously verified pilot, all eleven src files byte-identical; reloaded and captured in collection."
+    },
+    {
+      "scene": "02-sisyphus-relief",
+      "backend": "WebGL 2",
+      "quality": "mobile",
+      "fps": 29.992983292899364,
+      "cpuSubmitP95Ms": 2.8999999999068677,
+      "drawCalls": 40,
+      "renderedTriangles": 199781,
+      "framebuffer": [
+        390,
+        219
+      ],
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "verificationBasis": "Previously verified pilot, all eleven src files byte-identical; reloaded and captured in collection."
+    },
+    {
+      "scene": "03-paris-balloon",
+      "backend": "WebGPU",
+      "quality": "desktop",
+      "fps": 59.98020653184449,
+      "cpuSubmitP95Ms": 10,
+      "drawCalls": 202,
+      "renderedTriangles": 545175,
+      "framebuffer": [
+        1600,
+        900
+      ],
+      "playbackSeconds": 22,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 140
+    },
+    {
+      "scene": "03-paris-balloon",
+      "backend": "WebGL 2",
+      "quality": "desktop",
+      "fps": 35.656645272679505,
+      "cpuSubmitP95Ms": 21.299999999813735,
+      "drawCalls": 223,
+      "renderedTriangles": 654334,
+      "framebuffer": [
+        1600,
+        900
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 140
+    },
+    {
+      "scene": "03-paris-balloon",
+      "backend": "WebGPU",
+      "quality": "mobile",
+      "fps": 30.00037500468756,
+      "cpuSubmitP95Ms": 6.300000000745058,
+      "drawCalls": 223,
+      "renderedTriangles": 654334,
+      "framebuffer": [
+        390,
+        219
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 140
+    },
+    {
+      "scene": "03-paris-balloon",
+      "backend": "WebGL 2",
+      "quality": "mobile",
+      "fps": 30.000000000000007,
+      "cpuSubmitP95Ms": 10.300000000745058,
+      "drawCalls": 223,
+      "renderedTriangles": 654334,
+      "framebuffer": [
+        390,
+        219
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 140
+    },
+    {
+      "scene": "04-golden-gate",
+      "backend": "WebGPU",
+      "quality": "desktop",
+      "fps": 59.98110595162523,
+      "cpuSubmitP95Ms": 6.099999999627471,
+      "drawCalls": 143,
+      "renderedTriangles": 578385,
+      "framebuffer": [
+        1600,
+        900
+      ],
+      "playbackSeconds": 22,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 75
+    },
+    {
+      "scene": "04-golden-gate",
+      "backend": "WebGL 2",
+      "quality": "desktop",
+      "fps": 29.15123611250125,
+      "cpuSubmitP95Ms": 24.699999999254942,
+      "drawCalls": 128,
+      "renderedTriangles": 572617,
+      "framebuffer": [
+        1600,
+        900
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 75
+    },
+    {
+      "scene": "04-golden-gate",
+      "backend": "WebGPU",
+      "quality": "mobile",
+      "fps": 30.000750018750473,
+      "cpuSubmitP95Ms": 6.6000000005587935,
+      "drawCalls": 128,
+      "renderedTriangles": 572617,
+      "framebuffer": [
+        390,
+        219
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 75
+    },
+    {
+      "scene": "04-golden-gate",
+      "backend": "WebGL 2",
+      "quality": "mobile",
+      "fps": 30.000750018750473,
+      "cpuSubmitP95Ms": 7.900000000372529,
+      "drawCalls": 128,
+      "renderedTriangles": 572617,
+      "framebuffer": [
+        390,
+        219
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 75
+    },
+    {
+      "scene": "05-tortoise-hare",
+      "backend": "WebGPU",
+      "quality": "desktop",
+      "fps": 53.78305833662397,
+      "cpuSubmitP95Ms": 18.700000000186265,
+      "drawCalls": 285,
+      "renderedTriangles": 314205,
+      "framebuffer": [
+        1600,
+        900
+      ],
+      "playbackSeconds": 22,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 158
+    },
+    {
+      "scene": "05-tortoise-hare",
+      "backend": "WebGL 2",
+      "quality": "desktop",
+      "fps": 32.501625081254055,
+      "cpuSubmitP95Ms": 17,
+      "drawCalls": 299,
+      "renderedTriangles": 316465,
+      "framebuffer": [
+        1600,
+        900
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 158
+    },
+    {
+      "scene": "05-tortoise-hare",
+      "backend": "WebGPU",
+      "quality": "mobile",
+      "fps": 30.001125042189088,
+      "cpuSubmitP95Ms": 7.2999999998137355,
+      "drawCalls": 299,
+      "renderedTriangles": 291218,
+      "framebuffer": [
+        390,
+        219
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 158
+    },
+    {
+      "scene": "05-tortoise-hare",
+      "backend": "WebGL 2",
+      "quality": "mobile",
+      "fps": 30.00112504218908,
+      "cpuSubmitP95Ms": 11.400000000372529,
+      "drawCalls": 299,
+      "renderedTriangles": 291218,
+      "framebuffer": [
+        390,
+        219
+      ],
+      "playbackSeconds": 8,
+      "errors": [],
+      "warnings": [],
+      "externalRequests": [],
+      "rendererMemoryStable": true,
+      "backwardPixelSeekIdentical": true,
+      "meshes": 158
+    }
+  ],
+  "sisyphusPreservedSourceSha256": {
+    "anatomy.js": "bbf3933d9b7bccfe281b866f537c871318f837030c48d2824321295720fe29d3",
+    "dust.js": "f153fa1b08cecdf234d71a3961535ea4fa233fb7296f61e688f2cd6e051b722a",
+    "figure.js": "b29b53c1af7279566ea0fa1c8e5a99e066dcb5d029a4e85f6b7f12aec426e64b",
+    "geometry.js": "1deb5bb23b64b2fbdffbb7393479f1c2b5f78c81760e41cf1583dec552368bc7",
+    "main.js": "4ffa443d0b3b1161fe2d8e8c0c28752f9e6686048fcd6c584410fe9d422ae188",
+    "materials.js": "866e5bd85b27470c81aa1a2151c6ae75f01a5e947f9995b6c98ad291f20ea778",
+    "math.js": "b176c50dace47b9f1510bec1100320c51f10f8026313aefdcd3b17710b1b6688",
+    "motion.js": "63a976e96eb3b29acc120ad9ed9cc9db3a14f6f83dfd490fc6916ea8783779ad",
+    "relief.js": "01992dcbf0177a6520953f369d7a686524e1fc56aaf60609cd935b6b5fbf91a4",
+    "generated/sculpture.bin": "ac19fc24089902660b74d02f4465d86a92a957dca4cf0cdcd077f43bbe147197",
+    "generated/sculpture.json": "560254cdbeec27409f5f544ad18f348538e49b77732745afd06d32a200372620"
+  }
+}

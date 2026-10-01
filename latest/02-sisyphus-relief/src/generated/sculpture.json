@@ -1,0 +1,38 @@
+{
+  "source": "tools/bake-sculpture.mjs",
+  "vertices": 22590,
+  "triangles": 45176,
+  "gridStep": 0.052,
+  "attributes": {
+    "positions": {
+      "type": "Float32Array",
+      "offset": 0,
+      "length": 67770
+    },
+    "normals": {
+      "type": "Float32Array",
+      "offset": 271080,
+      "length": 67770
+    },
+    "skinIndex": {
+      "type": "Uint16Array",
+      "offset": 542160,
+      "length": 90360
+    },
+    "skinWeight": {
+      "type": "Float32Array",
+      "offset": 722880,
+      "length": 90360
+    },
+    "cavity": {
+      "type": "Float32Array",
+      "offset": 1084320,
+      "length": 22590
+    },
+    "indices": {
+      "type": "Uint32Array",
+      "offset": 1174680,
+      "length": 135528
+    }
+  }
+}

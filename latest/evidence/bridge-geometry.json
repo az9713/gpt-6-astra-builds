@@ -1,0 +1,278 @@
+{
+  "samples": 2401,
+  "minSideClearance": 0.11098370109645384,
+  "minBearingGap": 0,
+  "maxAttachmentError": 1.0702292546683378e-06,
+  "maxFootSurfaceError": 0,
+  "minFootEdgeClearance": 0.6600000000000001,
+  "backwardSeeking": "exact matching state snapshots",
+  "after20Seconds": "holds final state",
+  "counts": {
+    "meshes": 75,
+    "instancedMeshes": 56,
+    "instances": 2196,
+    "triangles": 301280
+  },
+  "finalState": {
+    "phase": "completed bridge hold",
+    "sectionSeated": true,
+    "cameraReveal": 1,
+    "sectionHeight": 0,
+    "leftDeckClearance": 0.21749998047947905,
+    "rightDeckClearance": 0.21749998047947905,
+    "bearingGaps": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "bearingPenetration": 0,
+    "guideAttachmentError": 2.710534456666177e-07,
+    "rigAttachmentError": 3.424429231980668e-07,
+    "maxFootSurfaceError": 0,
+    "minFootEdgeClearance": 0.6600000000000001,
+    "sectionBounds": {
+      "min": [
+        -4.022500019520521,
+        10.250000149011612,
+        -3.790999960154295
+      ],
+      "max": [
+        4.022500019520521,
+        13.084999963641167,
+        3.786000084131956
+      ]
+    },
+    "anchors": {
+      "guideRoadway": [
+        [
+          -4.095,
+          12.41,
+          -2.1
+        ],
+        [
+          -4.095,
+          12.41,
+          2.1
+        ],
+        [
+          4.095,
+          12.41,
+          -2.1
+        ],
+        [
+          4.095,
+          12.41,
+          2.1
+        ]
+      ],
+      "guideHands": [
+        [
+          -4.745,
+          13.248144,
+          -2.132
+        ],
+        [
+          -4.745,
+          13.255152,
+          2.068
+        ],
+        [
+          4.745,
+          13.266617,
+          -2.068
+        ],
+        [
+          4.745,
+          13.271999,
+          2.132
+        ]
+      ],
+      "slingRoadway": [
+        [
+          -2.58,
+          12.5,
+          -2.55
+        ],
+        [
+          -2.58,
+          12.5,
+          2.55
+        ],
+        [
+          2.58,
+          12.5,
+          -2.55
+        ],
+        [
+          2.58,
+          12.5,
+          2.55
+        ]
+      ],
+      "slingSpreader": [
+        [
+          -2.58,
+          15.02,
+          -2.4021
+        ],
+        [
+          -2.58,
+          15.02,
+          2.4021
+        ],
+        [
+          2.58,
+          15.02,
+          -2.4021
+        ],
+        [
+          2.58,
+          15.02,
+          2.4021
+        ]
+      ],
+      "hoistHeads": [
+        [
+          -2.58,
+          23.38,
+          -0.182
+        ],
+        [
+          -2.58,
+          23.38,
+          0.182
+        ],
+        [
+          2.58,
+          23.38,
+          -0.182
+        ],
+        [
+          2.58,
+          23.38,
+          0.182
+        ]
+      ],
+      "hoistBlocks": [
+        [
+          -2.58,
+          16.6,
+          -0.18
+        ],
+        [
+          -2.58,
+          16.6,
+          0.18
+        ],
+        [
+          2.58,
+          16.6,
+          -0.18
+        ],
+        [
+          2.58,
+          16.6,
+          0.18
+        ]
+      ],
+      "bearingRoadway": [
+        [
+          -3.89,
+          10.25,
+          -3.59
+        ],
+        [
+          -3.89,
+          10.25,
+          3.59
+        ],
+        [
+          3.89,
+          10.25,
+          -3.59
+        ],
+        [
+          3.89,
+          10.25,
+          3.59
+        ]
+      ],
+      "bearingSeats": [
+        [
+          -3.89,
+          10.25,
+          -3.59
+        ],
+        [
+          -3.89,
+          10.25,
+          3.59
+        ],
+        [
+          3.89,
+          10.25,
+          -3.59
+        ],
+        [
+          3.89,
+          10.25,
+          3.59
+        ]
+      ],
+      "feet": [
+        [
+          -5.12,
+          12.16,
+          -2.25
+        ],
+        [
+          -5.5,
+          12.16,
+          -1.9500000000000002
+        ],
+        [
+          -5.12,
+          12.16,
+          1.9500000000000002
+        ],
+        [
+          -5.5,
+          12.16,
+          2.25
+        ],
+        [
+          5.12,
+          12.16,
+          -1.9500000000000002
+        ],
+        [
+          5.5,
+          12.16,
+          -2.25
+        ],
+        [
+          5.12,
+          12.16,
+          2.25
+        ],
+        [
+          5.5,
+          12.16,
+          1.9500000000000002
+        ]
+      ]
+    },
+    "structuralInstances": 1910,
+    "workerAndRigInstances": 128,
+    "instancedDrawGroups": 56,
+    "sunDirection": [
+      -60,
+      42,
+      -78
+    ],
+    "waterHighlights": "actual directional light BRDF; no painted glitter",
+    "historicalTreatment": "original period-inspired illustration; construction equipment and sequence are not an archival reconstruction"
+  },
+  "renderValidation": "Not performed by this geometry-only check; parent centrally captures both backends."
+}

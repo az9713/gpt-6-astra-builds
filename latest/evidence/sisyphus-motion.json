@@ -1,0 +1,83 @@
+{
+  "samples": 4801,
+  "dt": 0.004166666666666667,
+  "worst": {
+    "handTargetGap": 2.220446049250313e-16,
+    "stanceDrift": 2.220446049250313e-16,
+    "upperArmLength": 1.6653345369377348e-15,
+    "lowerArmLength": 1.6653345369377348e-15,
+    "thighLength": 1.5543122344752192e-15,
+    "shinLength": 1.5543122344752192e-15,
+    "rockPenetration": 1.9993146475898298e-05
+  },
+  "at": {
+    "upperArmLength": 17.516666666666666,
+    "lowerArmLength": 16.983333333333334,
+    "thighLength": 17.675,
+    "shinLength": 17.754166666666666,
+    "rockPenetration": 0.17083333333333334,
+    "handTargetGap": 1.6791666666666667,
+    "stanceDrift": 17.304166666666667
+  },
+  "continuity": [
+    {
+      "t": 0,
+      "positionSpan": 0.0001238602298810169,
+      "velocityJump": 0.003769049742031954
+    },
+    {
+      "t": 3.8,
+      "positionSpan": 4.574883787356135e-07,
+      "velocityJump": 5.282191286742e-07
+    },
+    {
+      "t": 4.25,
+      "positionSpan": 5.083138222548029e-05,
+      "velocityJump": 0.00011328751418519132
+    },
+    {
+      "t": 4.25,
+      "positionSpan": 5.083138222548029e-05,
+      "velocityJump": 0.00011328751418519132
+    },
+    {
+      "t": 6.95,
+      "positionSpan": 6.342193534779412e-05,
+      "velocityJump": 4.568327060571188e-05
+    },
+    {
+      "t": 9.1,
+      "positionSpan": 2.934487212430871e-05,
+      "velocityJump": 0.00022767485785645523
+    },
+    {
+      "t": 10.65,
+      "positionSpan": 0.00023498300387547876,
+      "velocityJump": 0.0016312028771196302
+    },
+    {
+      "t": 13.9,
+      "positionSpan": 4.015146714228189e-05,
+      "velocityJump": 0.00011328746977268259
+    },
+    {
+      "t": 16.6,
+      "positionSpan": 8.015779483634228e-14,
+      "velocityJump": 7.625704863580325e-09
+    },
+    {
+      "t": 17.3,
+      "positionSpan": 3.3238474372865614e-07,
+      "velocityJump": 7.201498071779785e-07
+    }
+  ],
+  "tests": {
+    "deterministic": true,
+    "exactLoop": true,
+    "finite": true
+  },
+  "limits": {
+    "contactMetric": "Hand targets and bone lengths; visual contact of the deformed skin is reviewed separately.",
+    "rockMetric": "Independent 192-point meridian support check; finite tessellation tolerance applies."
+  }
+}

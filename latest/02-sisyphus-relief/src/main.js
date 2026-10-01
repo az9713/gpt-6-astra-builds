@@ -1,0 +1,31 @@
+import * as THREE from 'three/webgpu';
+import {stone} from './materials.js';
+import {poseAt} from './motion.js';
+import {createFigure} from './figure.js';
+import {createRelief} from './relief.js';
+import {createDust} from './dust.js';
+import {ease,lerp} from './math.js';
+import {ground} from './motion.js';
+const params=new URLSearchParams(location.search),forced=params.get('backend')==='webgl',mobile=params.get('quality')==='mobile'||innerWidth<700;
+const renderer=new THREE.WebGPURenderer({antialias:true,forceWebGL:forced,alpha:false,trackTimestamp:params.has('profile')});renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1:1.5));renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
+document.body.appendChild(renderer.domElement);renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','Sisyphus pushing a boulder in a living limestone relief, a seamless twenty-second loop');await renderer.init();
+const scene=new THREE.Scene();scene.background=new THREE.Color('#30332f');
+const camera=new THREE.PerspectiveCamera(33,16/9,.1,100);camera.position.set(.6,7.15,26.7);camera.lookAt(0,5.15,.2);
+const hemi=new THREE.HemisphereLight('#e8e5dd','#615b4f',.92);scene.add(hemi);
+const sun=new THREE.DirectionalLight('#fff0d1',3.45);sun.position.set(-9,16,11);sun.target.position.set(0,4,0);sun.castShadow=true;sun.shadow.mapSize.set(mobile?1024:2048,mobile?1024:2048);Object.assign(sun.shadow.camera,{left:-15,right:15,top:11,bottom:-11,near:.5,far:65});sun.shadow.bias=-.00014;sun.shadow.normalBias=.025;scene.add(sun,sun.target);
+const fill=new THREE.DirectionalLight('#e6dfcd',.48);fill.position.set(9,6,7);scene.add(fill);
+const bodyStone=stone({color:'#c9bfa7',fine:true,cavity:true}),baseStone=stone({color:'#bdb49f',fine:true}),edgeStone=stone({color:'#cbc1a9',fine:true}),shadowStone=stone({color:'#a99f87',fine:true});
+const relief=createRelief(scene,baseStone,edgeStone,shadowStone),figure=await createFigure(scene,bodyStone,edgeStone),dust=createDust(scene);
+let manual=params.has('manual')?0:null,origin=null,current=0,lastDraw=-Infinity,paused=null,lastStats={},frameTimes=[],drawSamples=[],rafTimes=[],rafLast=null,nextDraw=0;
+function resize(){let w=innerWidth,h=innerHeight;if(w/h>16/9)w=h*16/9;else h=w*9/16;const cap=mobile?900000:2100000,dpr=Math.min(devicePixelRatio,mobile?1:1.5,Math.sqrt(cap/(w*h)));renderer.setPixelRatio(dpr);renderer.setSize(Math.round(w),Math.round(h));camera.aspect=w/h;camera.updateProjectionMatrix();}
+function draw(time){const begin=performance.now();current=((time%20)+20)%20;const q=poseAt(time);figure.update(q);relief.update(q);const wide=ease(current,3.8,6.7)*(1-ease(current,11.3,17.3)),cx=3.7*Math.tanh((q.hipX+q.rock.x)*.47/3.7),cy=ground((q.hipX+q.rock.x)*.5)+1.55;camera.position.set(cx+.45,cy+lerp(1.65,20,wide),lerp(19.8,12.4,wide));camera.lookAt(cx,cy,lerp(.6,2.1,wide));dust.update(current,camera);scene.updateMatrixWorld(true);renderer.info.reset();renderer.render(scene,camera);lastStats={cpuSubmitMs:performance.now()-begin,render:JSON.parse(JSON.stringify(renderer.info.render)),memory:JSON.parse(JSON.stringify(renderer.info.memory)),pose:q};drawSamples.push({time:current,cpuMs:lastStats.cpuSubmitMs});if(drawSamples.length>5000)drawSamples.shift();}
+resize();figure.update(poseAt(0));relief.update(poseAt(0));await renderer.compileAsync(scene,camera);draw(0);
+let meshes=0,triangles=0,materials=new Set();scene.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3*(o.count||1);for(const m of Array.isArray(o.material)?o.material:[o.material])materials.add(m)}});
+window.__sceneInfo={title:'Sisyphus — The Burden in Stone',pilot:true,stage:'refined pilot with corrected descent',requestedModel:'gpt-6-astra',requestedReasoningEffort:'xhigh',threeVersion:'0.186.1',threeRevision:THREE.REVISION,renderer:'WebGPURenderer',backend:renderer.backend.isWebGPUBackend?'WebGPU':'WebGL 2',forcedWebGL:forced,loop:true,duration:20,meshes,triangles:Math.round(triangles),nodeMaterials:materials.size,artwork:'original procedural geometry and TSL',externalAssets:0,quality:mobile?'mobile':'desktop'};
+window.__renderAt=async t=>{manual=t;draw(t);if(renderer.backend.isWebGPUBackend)await renderer.backend.device.queue.onSubmittedWorkDone()};
+window.__resume=()=>{manual=null;origin=null;lastDraw=-Infinity;frameTimes=[];drawSamples=[];rafTimes=[];rafLast=null;nextDraw=0};
+window.__state=()=>{const q=lastStats.pose;return{time:current,phase:q.phase,hipX:q.hipX,boulder:q.rock,contactWeight:q.contactWeight,hands:q.hands,contacts:q.contacts,feet:q.feet,heading:q.heading,cpuSubmitMs:lastStats.cpuSubmitMs,render:lastStats.render,memory:lastStats.memory}};
+window.__poseAt=poseAt;window.__renderer=renderer;window.__scene=scene;window.__figure=figure;window.__camera=camera;window.__frameTimes=()=>frameTimes;window.__drawSamples=()=>drawSamples;window.__rafTimes=()=>rafTimes;
+renderer.setAnimationLoop(now=>{if(manual!==null||document.hidden)return;if(rafLast!==null)rafTimes.push(now-rafLast);rafLast=now;if(origin===null){origin=now;nextDraw=now}const interval=1000/(mobile?30:60);if(now+.4<nextDraw)return;if(lastDraw!==-Infinity)frameTimes.push(now-lastDraw);lastDraw=now;nextDraw+=interval;if(nextDraw<now-interval)nextDraw=now+interval;draw((now-origin)/1000)});
+addEventListener('resize',()=>{resize();draw(current)});document.addEventListener('visibilitychange',()=>{if(document.hidden)paused=performance.now();else if(paused!==null){if(origin!==null)origin+=performance.now()-paused;paused=null;lastDraw=-Infinity;nextDraw=performance.now();rafLast=null}});
+window.__ready=true;
